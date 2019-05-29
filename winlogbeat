@@ -1,0 +1,58 @@
+fields_under_root: true
+fields.collector_node_id: ${sidecar.nodeName}
+fields.gl2_source_collector: ${sidecar.nodeId}
+
+output.logstash:
+   hosts: ["${user.BeatsInput}"]
+path:
+  data: C:\Program Files\Graylog\sidecar\cache\winlogbeat\data
+  logs: C:\Program Files\Graylog\sidecar\logs
+tags:
+ - windows
+winlogbeat:
+    event_logs:
+    - name: Application
+    level: critical, error, warning
+    ignore_older: 48h
+  - name: Security
+    event_id: ...
+    processors:
+        - drop_event.when.not.or:
+            - equals.event_id: 129
+            - equals.event_id: 141
+            - equals.event_id: 1102
+            - equals.event_id: 4648
+            - equals.event_id: 4657
+            - equals.event_id: 4688
+            - equals.event_id: 4697-4698
+            - equals.event_id: 4720-4738 
+            - equals.event_id: 4767
+            - equals.event_id: 4728
+            - equals.event_id: 4732
+            - equals.event_id: 4634
+            - equals.event_id: 4735
+            - equals.event_id: 4740
+            - equals.event_id: 4756
+    level: critical, error, warning, information
+    ignore_older: 48h
+  - name: System
+    event_id: ...
+    processors:
+        - drop_event.when.not.or:
+            - equals.event_id: 129
+            - equals.event_id: 1022
+            - equals.event_id: 1033
+            - equals.event_id: 1034
+            - equals.event_id: 4624-4625
+            - equals.event_id: 4633
+            - equals.event_id: 4719
+            - equals.event_id: 4738
+            - equals.event_id: 7000
+            - equals.event_id: 7022
+            - equals.event_id: 7024
+            - equals.event_id: 7031
+            - equals.event_id: 7034-7036
+            - equals.event_id: 7040
+            - equals.event_id: 7045
+    level: critical, error, warning
+    ignore_older: 48h
